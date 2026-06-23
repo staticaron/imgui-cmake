@@ -7714,7 +7714,10 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
             ImRect title_bar_rect = window->TitleBarRect();
             if (g.HoveredWindow == window && g.HoveredId == 0 && g.HoveredIdPreviousFrame == 0 && g.ActiveId == 0 && IsMouseHoveringRect(title_bar_rect.Min, title_bar_rect.Max))
                 if (g.IO.MouseClickedCount[0] == 2 && GetKeyOwner(ImGuiKey_MouseLeft) == ImGuiKeyOwner_NoOwner)
+                {
                     window->WantCollapseToggle = true;
+                    SetKeyOwner(ImGuiKey_MouseLeft, window->MoveId); // Claim input the same way ButtonBehavior() does. Prevent a same-frame move from triggering other items. (#9439)
+                }
             if (window->WantCollapseToggle)
             {
                 window->Collapsed = !window->Collapsed;
@@ -16956,7 +16959,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         if (TreeNode("SettingsTables", "Settings packed data: Tables: %d bytes", g.SettingsTables.size()))
         {
             for (ImGuiTableSettings* settings = g.SettingsTables.begin(); settings != NULL; settings = g.SettingsTables.next_chunk(settings))
-                DebugNodeTableSettings(settings);
+                DebugNodeTableSettings(settings, NULL);
             TreePop();
         }
 
@@ -17909,6 +17912,7 @@ void ImGui::ShowDebugLogWindow(bool* p_open)
     ShowDebugLogFlag("Nav", ImGuiDebugLogFlags_EventNav);
     ShowDebugLogFlag("Popup", ImGuiDebugLogFlags_EventPopup);
     ShowDebugLogFlag("Selection", ImGuiDebugLogFlags_EventSelection);
+    ShowDebugLogFlag("Table", ImGuiDebugLogFlags_EventTable);
     ShowDebugLogFlag("InputRouting", ImGuiDebugLogFlags_EventInputRouting);
 
     if (SmallButton("Clear"))
