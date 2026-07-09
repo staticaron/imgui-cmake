@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(imgui-docking)
+project(imgui)
 
 set(IMGUI_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui.h"
@@ -18,10 +18,10 @@ set(IMGUI_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_glfw.cpp"
 )
 
-add_library(imgui-docking STATIC "${IMGUI_SOURCES}")
+add_library(imgui STATIC "${IMGUI_SOURCES}")
 
-target_include_directories(imgui-docking PUBLIC
+target_include_directories(imgui PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-target_link_libraries(imgui-docking glfw glad)
+target_link_libraries(imgui glfw glad)
